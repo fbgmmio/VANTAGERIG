@@ -1,5 +1,13 @@
 const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL!;
 
+export function getEmails(): { email: string; ts: number; ip: string }[] {
+  return [];
+}
+
+export function emailCount(): number {
+  return 0;
+}
+
 export async function addEmail(email: string): Promise<"added" | "duplicate" | "error"> {
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
