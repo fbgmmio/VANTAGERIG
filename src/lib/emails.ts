@@ -1,4 +1,4 @@
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/REDACTED/exec";
+const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL!;
 
 export async function addEmail(email: string): Promise<"added" | "duplicate" | "error"> {
   try {
