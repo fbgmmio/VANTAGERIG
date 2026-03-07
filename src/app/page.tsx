@@ -277,7 +277,7 @@ export default function LandingPage() {
 
           {/* Tagline */}
           <p className="font-sans text-lg md:text-xl text-t-muted leading-relaxed max-w-lg mb-8">
-            Institutional-grade swing trade analytics for independent traders.
+            Centralized equity trading analytics for independent traders.
             Regime scoring, alerts, and sector breadth — in one terminal.
           </p>
 
