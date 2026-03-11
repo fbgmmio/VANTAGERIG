@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 
 const FEATURES = [
   {
@@ -185,10 +184,6 @@ function StatusBar() {
 }
 
 export default function LandingPage() {
-  const [email, setEmail] = useState("");
-  const [agreed, setAgreed] = useState(false);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [message, setMessage] = useState("");
   const [openFeatures, setOpenFeatures] = useState<Set<string>>(new Set());
 
   function toggleFeature(id: string) {
@@ -198,35 +193,6 @@ export default function LandingPage() {
       else next.add(id);
       return next;
     });
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!agreed) { setMessage("Please agree to the Privacy Policy before submitting."); setStatus("error"); return; }
-    if (!email.trim() || status === "loading" || status === "success") return;
-
-    setStatus("loading");
-    setMessage("");
-
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setStatus("success");
-        setMessage(data.message ?? "You're on the list.");
-        setEmail("");
-      } else {
-        setStatus("error");
-        setMessage(data.error ?? "Something went wrong. Try again.");
-      }
-    } catch {
-      setStatus("error");
-      setMessage("Connection error. Try again.");
-    }
   }
 
   return (
@@ -281,57 +247,13 @@ export default function LandingPage() {
             Regime scoring, alerts, and sector breadth — in one terminal.
           </p>
 
-          {/* Email CTA */}
-          {status === "success" ? (
-            <div className="border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.04)] px-5 py-4 rounded-2xl max-w-md">
-              <p className="font-sans text-white font-medium">You&apos;re on the list.</p>
-              <p className="font-sans text-sm text-t-muted mt-0.5">We&apos;ll reach out when your access is ready.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md">
-              <div className="flex-1 relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  disabled={status === "loading"}
-                  className="w-full bg-t-surface border border-[rgba(255,255,255,0.1)] focus:border-[rgba(255,255,255,0.4)] focus:outline-none transition-colors font-sans text-sm text-t-text placeholder:text-t-dim px-4 py-3 rounded-xl disabled:opacity-50"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={status === "loading" || !email.trim()}
-                className="bg-white hover:bg-[#E8E6E0] text-[#0A0A0F] font-sans font-semibold text-sm px-6 py-3 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
-              >
-                {status === "loading" ? "Submitting…" : "Request Access"}
-              </button>
-            </form>
-          )}
-
-          {/* Privacy consent */}
-          {status !== "success" && (
-            <label className="flex items-start gap-2.5 mt-3 cursor-pointer group max-w-md">
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="mt-0.5 shrink-0 accent-white"
-              />
-              <span className="font-sans text-xs text-t-dim leading-relaxed group-hover:text-t-muted transition-colors">
-                I agree to the{" "}
-                <Link href="/privacy" className="text-white underline underline-offset-2 hover:text-t-muted transition-colors">
-                  Privacy Policy
-                </Link>
-                . I understand I will only receive one email when my access is ready.
-              </span>
-            </label>
-          )}
-
-          {status === "error" && (
-            <p className="font-sans text-sm text-red-400 mt-2">{message}</p>
-          )}
+          {/* CTA */}
+          <a
+            href="https://www.vantagerig.com"
+            className="inline-block bg-white hover:bg-[#E8E6E0] text-[#0A0A0F] font-sans font-semibold text-sm px-8 py-3 rounded-xl transition-colors"
+          >
+            Try It Now
+          </a>
 
           {/* Social proof */}
           <p className="font-sans text-xs text-t-dim mt-3">
